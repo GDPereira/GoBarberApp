@@ -16,6 +16,7 @@ import * as Yup from 'yup';
 import logoImg from '../../assets/logo.png';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useAuth } from '../../hooks/auth';
 import getValidationErrors from '../../utils/getValidationErrors';
 import {
   Container,
@@ -36,6 +37,8 @@ const SignIn: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
+  const { signIn, user } = useAuth();
+
   const handleSignIn = useCallback(async (data: SignInFormData) => {
     try {
       formRef.current?.setErrors({});
@@ -50,9 +53,7 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
 
-      // await signIn({ email: data.email, password: data.password });
-
-      // history.push('/dashboard');
+      await signIn({ email: data.email, password: data.password });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         const errors = getValidationErrors(error);
